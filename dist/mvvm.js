@@ -46,11 +46,20 @@ window.mvvm = {
 // isDate
 // isRegExp
 // isError
-['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'].forEach(function(name) {
+
+var toString = ({}).toString;
+
+['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error', 'Array'].forEach(function(name) {
   exports['is' + name] = function(obj) {
     return toString.call(obj) === '[object ' + name + ']';
   }
 })
+
+exports.removeFromArray = function (item, array) {
+  for (var i = 0, len = array.length; i < len; i++) {
+    if (array[i] === item) array.splice(i--, 1), len--
+  }
+}
 },{}],5:[function(require,module,exports){
 var global = require('./global')
 var uitls = require('./utils')
@@ -65,6 +74,14 @@ function parser (element, callback) {
   if (element.nextSibling) parser(element.nextSibling)
 }
 
+function eachObject (obj, iteratee) {
+  for (i in obj) {
+    if (i.indexOf('__') != 0 && obj.hasOwnProperty(i)) {
+      
+    }
+  }
+}
+
 function View (rootElement, generater, options) {
   this.rootElement = rootElement
   this.directives = Object.assign({}, global.directives, options.withDirectives)
@@ -75,17 +92,15 @@ function View (rootElement, generater, options) {
 
   this.states = {}
 
-  var self = this
   this.handler = {
     states: this.states,
-    setStates: function (states) {
-      self.setStates(states)
-    }
+    setStates: this.setStates.bind(this)
   }
 
   generater.call(this.handler)
   this.build()
 }
+
 View.prototype = {
   build: function () {
     parser(rootElement, function (element) {
@@ -97,7 +112,7 @@ View.prototype = {
       }
     })
   },
-  setStates: function () {
+  setStates: function (states) {
     
   },
   bindDirective: function (element) {

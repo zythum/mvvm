@@ -6,7 +6,10 @@
 // isDate
 // isRegExp
 // isError
-['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'].forEach(function(name) {
+
+var toString = ({}).toString;
+
+['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error', 'Array'].forEach(function(name) {
   exports['is' + name] = function(obj) {
     return toString.call(obj) === '[object ' + name + ']';
   }

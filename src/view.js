@@ -11,6 +11,14 @@ function parser (element, callback) {
   if (element.nextSibling) parser(element.nextSibling)
 }
 
+function eachObject (obj, iteratee) {
+  for (i in obj) {
+    if (i.indexOf('__') != 0 && obj.hasOwnProperty(i)) {
+      
+    }
+  }
+}
+
 function View (rootElement, generater, options) {
   this.rootElement = rootElement
   this.directives = Object.assign({}, global.directives, options.withDirectives)
@@ -24,12 +32,12 @@ function View (rootElement, generater, options) {
   this.handler = {
     states: this.states,
     setStates: this.setStates.bind(this)
-    }
   }
 
   generater.call(this.handler)
   this.build()
 }
+
 View.prototype = {
   build: function () {
     parser(rootElement, function (element) {
@@ -41,7 +49,7 @@ View.prototype = {
       }
     })
   },
-  setStates: function () {
+  setStates: function (states) {
     
   },
   bindDirective: function (element) {
